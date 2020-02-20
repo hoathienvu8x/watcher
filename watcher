@@ -5,7 +5,8 @@
 # Directory you want to watch
 WATCHDIR="${1:-}"
 # Check directory track valid
-if [ ! -d "$WATCHDIR" ]; then
+if [ ! -d "$WATCHDIR" ];
+then
     echo "Directory is not exists !"
     exit
 fi
@@ -20,7 +21,7 @@ LASTWATCHED="$WORKINGDIR/lastwatch"
 # The first time we create the log file
 touch "$LAST"
 
-if [ -f "" ];
+if [ -f "$LASTWATCHED" ];
 then
     find "$WATCHDIR" -cnewer "$LASTWATCHED" -type f ! -path "$WORKINGDIR/*" > "$CURRENT"
 else
