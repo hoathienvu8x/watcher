@@ -26,8 +26,8 @@ then
     find "$WATCHDIR" -cnewer "$LASTWATCHED" -type f ! -path "$WORKINGDIR/*" > "$CURRENT"
 else
     find "$WATCHDIR" -type f ! -path "$WORKINGDIR/*" > "$CURRENT"
-    touch "$LASTWATCHED"
 fi
+echo "`date +"%FT%T%z"`" > "$LASTWATCHED"
 diff "$LAST" "$CURRENT" > /dev/null 2>&1
 
 # If there is no difference exit
