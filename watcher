@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Copyright (C) NublaII <https://stackoverflow.com/users/1360859/nublaii>
+
+# Directory you want to watch
+WATCHDIR="${1:-}"
+# Check directory track valid
+if [ ! -d "$WATCHDIR" ]; then
+    echo "Directory is not exists !"
+    exit
+fi
+WORKINGDIR="$WATCHDIR/.tracked"
+# Create directory .tracked
+mkdir -p "$WORKINGDIR"
+# Name of the file that will keep the list of the files when you last checked it
+LAST="$WORKINGDIR/last"
+# Name of the file that will keep the list of the files you are checking now
+CURRENT="$WORKINGDIR/current"
+LASTWATCHED="$WORKINGDIR/lastwatch"
+# The first time we create the log file
+touch "$LAST"
+
+if [ -f "" ];
+then
+    find "$WATCHDIR" -cnewer "$LASTWATCHED" -type f ! -path "$WORKINGDIR/*" > "$CURRENT"
+else
+    find "$WATCHDIR" -type f ! -path "$WORKINGDIR/*" > "$CURRENT"
+    touch "$LASTWATCHED"
+fi
+diff "$LAST" "$CURRENT" > /dev/null 2>&1
+
+# If there is no difference exit
+if [ $? -eq 0 ]
+then
+    echo "No changes"
+else
+    # Else, list the files that changed
+    echo "List of new files"
+    diff "$LAST" "$CURRENT" | grep '^>'
+    echo "List of files removed"
+    diff "$LAST" "$CURRENT" | grep '^<'
+
+    # Lastly, move CURRENT to LAST
+    mv "$CURRENT" "$LAST"
+fi
