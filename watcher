@@ -23,6 +23,7 @@ touch "$LAST"
 
 if [ -f "$LASTWATCHED" ];
 then
+    echo "Check file changed or created never `cat "$LASTWATCHED"`"
     find "$WATCHDIR" -cnewer "$LASTWATCHED" -type f ! -path "$WORKINGDIR/*" > "$CURRENT"
 else
     find "$WATCHDIR" -type f ! -path "$WORKINGDIR/*" > "$CURRENT"
