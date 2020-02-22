@@ -34,13 +34,13 @@ diff "$LAST" "$CURRENT" > /dev/null 2>&1
 # If there is no difference exit
 if [ $? -eq 0 ]
 then
-    echo "No changes"
+    echo -e "\033[1;32mNo changes\033[0m"
 else
     # Else, list the files that changed
-    echo "List of new files"
-    diff "$LAST" "$CURRENT" | grep '^>'
-    echo "List of files removed"
-    diff "$LAST" "$CURRENT" | grep '^<'
+    echo -e "\033[0;32mList of new files\033[0m"
+    diff "$LAST" "$CURRENT" | grep '^>' | awk -F '> ' '{print $2}'
+    echo -e "\033[0;31mList of files removed\033[0m"
+    diff "$LAST" "$CURRENT" | grep '^<' | awk -F '< ' '{if(system("[ ! -f " $2 " ]") == 0) { print $2}}'
 
     # Lastly, move CURRENT to LAST
     mv "$CURRENT" "$LAST"
